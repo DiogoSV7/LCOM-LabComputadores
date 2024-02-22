@@ -34,11 +34,14 @@
 
   ![image](https://github.com/DiogoSV7/ResumosLCOM/assets/145665382/a478d081-5561-4516-a845-387aa9cd3e56) 
 
-  3 counters de 16 bits independentes:
+  *3 counters de 16 bits independentes:*
   
     $ Portas 0x40, 0x41, Ox42
     $ MSB e LSB são adressados separadamente
     $ Counting modes são todos independentes
     $ Valores de counting iniciais independentes
 
-    
+  *1 control register de 8 bits:*
+
+    $ Porta 0x43
+    &
