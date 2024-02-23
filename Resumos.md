@@ -44,4 +44,96 @@
   *1 control register de 8 bits:*
 
     $ Porta 0x43
-    &
+    $ Cada counter é programado independentemente
+
+  ### i8254 Control World
+
+    * Control word tem de ser escrita no control register (Ox43) 
+
+    * BIT 0 (BCD)  - Se for 1 -> BCD
+                   - Se for 0 -> Binário
+
+    * BIT 1,2,3 - o número em binário corresponde ao counting mode
+
+    * BIT 4,5  (Counter inicialization) - 01 -> LSB (least significant byte)
+                                        - 10 -> MSB (most significant byte)
+                                        - 11 -> LSB seguido de MSB
+
+    * BIT 7,6 (Counter selection) - 00 -> counter 0
+                                  - 01 -> counter 1
+                                  - 10 -> counter 2
+
+### i8254: Read-back Command
+
+    * O comando permite retornar a configuração programada e o valor atual do counter.
+    * As barras em cima de *COUNT* e *STATUS* significam que estes bits estão ativos em 0.
+    * O comando é escrito no control register (0x43).
+
+    *LEITURA DO STATUS/COUNT*
+    
+    * A configuração (status) é lida a partir do timer´s data register
+              
+### Utiliziçaõ de i8254 no PC
+
+  - Timer 0: Utilizado para fornecer uma base temporal
+  - Timer 1: Utilizado para dar refresh a DMA
+  - Timer 2: Utilizado para gerar tone
+
+  - É necessário utilizar as funções SYS_DEVIO kernel call para I/O.
+      *int sys_inb(int port, u32_t *byte);
+      *int sys_outb(int port, u32_t byte);
+
+  - Não há necessidade de utilizar control register antes de acessar qualquer 1 dos timers.
+
+### C Enumerated Types
+
+  - enum timer_status_ field {
+      - tsf_all,               (configuração em hexadecimal)
+      - tsf_initial,           (modo de inicialização do timer)
+      - tsf_mode,              (timer counting mode)
+      - tsf_base               (timer counting base)
+- };
+
+- O prefixo "tsf_" é utilizado para evitar colisões
+
+### C Unions
+
+  - union timer_status_field_val{
+        - uint8_t      byte;
+        - enum timer_init       in_mode;
+        - uint8_t      count_mode;
+        - bool         bcd;
+  -};
+
+### Generalizações de C
+
+  *Bitwise operators:*
+
+    $ & bitwise AND
+    $ | bitwise inclusive OR
+    $ ^ bitwise exclusive OR
+    $ ~ one´s complement
+
+  *Logical operator*
+
+    $ && logical AND
+    $ || logical OR
+    $ ! negation
+
+  *Masks*
+
+    $ uchar mask = Ox80;  -> 10000000 binary
+
+  *Shift Operators* 
+
+    $ << left shift (RHS) -- Right hand side tem de ser um nº não negativo
+    $ >> right shift (LHS) -- Left hand side pode ser qualquer tipo de inteiro
+
+  *Ports*
+
+    $ port - 0x5a (8-bit) ou Ox0000005a (32-bit)
+    $ ~port - 0xa5 (8-bit) ou Oxffffffa5 (32-bit)
+
+  *Como definir uma macro*
+
+    $ #define MACRO Ox41 - Atribuir uma string a um valor inteiro
