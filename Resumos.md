@@ -156,7 +156,44 @@ Como é que o processador sabe de um I/O evento?
   
 ### PC Interrup Hardware: Priority Interrupt Controller(PIC)
 
-  ![image](https://github.com/DiogoSV7/ResumosLCOM/assets/145665382/494ddfe9-91e0-4435-a22e-1b144c24adb2&height=700&width=700)
+  ![image](https://github.com/DiogoSV7/ResumosLCOM/assets/145665382/35873fd2-5b4c-46b6-9cbb-b2b2d9db4c7c)
 
+
+### IRQ lines and Vectors
+
+  IRQ line -> determinada pelo HW designer
+  Vector -> Também especificado pelo HW designer, porém pode ser configurado no boot time
+
+### Interrupt Handlers (IH)
+
+  - Interrupt handlers são executados pelo hardware ao chegar a um interrupt
+  - No MINIX 3, device drivers sao implementados as user-level processes, ao invés de kernel-level
+  - Então como é que fazemos interrupt handling em MINIX 3?
+
+    *SOLUÇÃO*
+    1. Executar o mínimo no kernel, isso é feito pelo generic interrupt handle (GIH)
+    2. Operações específicas dos devices são executadas pelas device drivers no user-level
+   
+### Generic Interrupt Handle (GIH)
+
+  Quando é apresentado com um interrupt, the GIH does:
   
+    1. Masks, in the PIC, a respetica IRQ line.
+    2. Notifica todas as device drivers interessadas naquele interrupt.
+    3. Se possível, unmasks, no PIC, a respetiva IRQ line.
+    4. Reconhece o interrupt ao utilizar o EOI command para o PIC.
+    5. Envia a IRETD instruction.
+
+### Como é que o GIH sabe quais device drivers estão interessadas num interrupt?
+
+  RESPOSTA: As device drivers dizem, utilizando a kernel call:
+    *int sys_irqsetpolicy(int irq_line, int policy, int *hook_id)*
+
+  !!! policy uses *IRQ_REENABLE* para informar o GIH que pode fazer unmask da IRQ line na PIC
+
+  !!! hook_id funciona tanto como:
+    - input : um id utilizado pelo kernel na notificação de um interrupt
+    - output : um id utilizado pelas device drivers em outras chamadas ao kernel neste interrupt
+
+  Podemos olhar para *sys_irqsetpolicy()* como uma subscrição de notificação de interrupts
 
