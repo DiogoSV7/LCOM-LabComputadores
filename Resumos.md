@@ -210,10 +210,11 @@ Como é que o processador sabe de um I/O evento?
   RESPOSTA : Utiliza o standard interprocess communication (IPC) mechanism.
               Mais especificamente utiliza NOTIFICAÇÕES
 
-  MINIX 3 IPC :
-              - Mecanismo baseado em messagens
-              - Processos enviam e recebem mensagens para comunicar entre eles e com o kernel
-              - Uma notificação é um tipo especial de mensagem, utilizado pelo kernel para uma comunicação não solicitada com um user-level process
+  MINIX 3 IPC:
+  
+     - Mecanismo baseado em messagens
+     - Processos enviam e recebem mensagens para comunicar entre eles e com o kernel
+     - Uma notificação é um tipo especial de mensagem, utilizado pelo kernel para uma comunicação não solicitada com um user-level process
 
 ### Como é que os device drivers recebem a notificação do GIH?
 
