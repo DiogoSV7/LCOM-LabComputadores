@@ -137,3 +137,26 @@
   *Como definir uma macro*
 
     $ #define MACRO Ox41 - Atribuir uma string a um valor inteiro
+
+## I/O and Interrupts
+
+### I/O Operations
+
+  * I/O devices normalmente são muito mais lentos que o processador, então este tem de esperar que os mesmos completem a sua operação atual
+
+Como é que o processador sabe de um I/O evento?
+
+1. POLLING - o processador polls o I/O device e lê o status register para descobrir
+      - Polling apresenta um tempo de resposta *ALTAMENTE VARIÁVEL*
+      - Bandwidth pode ser alta se interface bus for rápido e processador polls frequentemente.
+
+2. INTERRUPTS - o I/O device notifica o processador através de interrupts
+      - Interrupts apresentam um tempo de resposta *NORMALMENTE RESPONSIVOS*
+      - Bandwidth media para pequena, depende na quantidade de dados disponíveis para serem transferidos
+  
+### PC Interrup Hardware: Priority Interrupt Controller(PIC)
+
+  ![image](https://github.com/DiogoSV7/ResumosLCOM/assets/145665382/494ddfe9-91e0-4435-a22e-1b144c24adb2&height=700&width=700)
+
+  
+
