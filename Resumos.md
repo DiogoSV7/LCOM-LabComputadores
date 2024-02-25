@@ -197,3 +197,56 @@ Como é que o processador sabe de um I/O evento?
 
   Podemos olhar para *sys_irqsetpolicy()* como uma subscrição de notificação de interrupts
 
+### MINIX 3 : Outras kernel calss relacionadas com interrupts
+
+*sys_irqrmpolicy(int *hook_id)** - Cancela a subscrição de notificações de interrupts anterior, ao especificar um pointer para o hook_id.
+
+*sys_irqenable(int *hook_id)** - Unsmaks no PIC uma interrupt line associada com uma notificação de interrupção previamente subscrita.
+
+*sys_irqdisable(int *hook_id)** - Masks no PIC uma linterrupt line associada com uma notificação de interrupção previamente subscrita.
+
+### Como é que o GIH notifica os device drivers da ocorrência de um interrupt?
+
+  RESPOSTA : Utiliza o standard interprocess communication (IPC) mechanism.
+              Mais especificamente utiliza NOTIFICAÇÕES
+
+  MINIX 3 IPC :
+              - Mecanismo baseado em messagens
+              - Processos enviam e recebem mensagens para comunicar entre eles e com o kernel
+              - Uma notificação é um tipo especial de mensagem, utilizado pelo kernel para uma comunicação não solicitada com um user-level process
+
+### Como é que os device drivers recebem a notificação do GIH?
+
+  1. Utiliza o IPC mechanism
+  2. Utiliza some library calls fornecida por *libdrivers* library
+
+  Utilizando *msg.m_notify.interrupts* conseguimos notificar interrupts, uma vez que Interrupt handlers não recebem argumentos e não retornam valores
+
+  *irq_set* é utilizado como uma mask para testar quais interrupts estão pendentes
+
+### O que acontece se o GIH não der unmask à IRQ line no PIC?
+
+  Isto pode acontecer se um device driver não der set à IRQ_REENABLE policy na sua interrupt subscription request.
+
+  RESPOSTA : Se tal acontecer, as device drivers terão de o fazer o mais rápido possível.
+
+### Como é que um device driver pode dar unmask a uma IRQ line no PIC?
+
+  Ao chamar *sys_irqenable(int *hook_id)**, com esta chamada o kernel vai dar unmask à IRQ line a pedido dos device drivers.
+
+### Interrupt Sharing no MINIX 3
+
+  - Minix 3 já inclui o seu próprio TIMER 0 interrupt handler
+  - Ao subscrever interrupts na IRQ line 0, o interrupt handler do nossa driver não vai substituir o IH do kernel
+  - Deste modo, teremos de partilhar interrupt lines entre dispositivos
+  - UTILIZAR 2 IH PARA O MESMO DISPOSITIVO NÃO É OQ QUEREMOS FAZER!!! 
+
+
+
+
+
+
+
+
+  
+ 
