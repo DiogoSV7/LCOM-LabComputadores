@@ -65,6 +65,10 @@
 
 ### i8254: Read-back Command
 
+<img width="883" alt="Captura de ecrã 2024-03-01, às 15 16 26" src="https://github.com/DiogoSV7/ResumosLCOM/assets/145665382/e4cd8e29-2377-461c-9601-4d2f42d96eea">
+
+
+
     * O comando permite retornar a configuração programada e o valor atual do counter.
     * As barras em cima de *COUNT* e *STATUS* significam que estes bits estão ativos em 0.
     * O comando é escrito no control register (0x43).
@@ -75,7 +79,7 @@
               
 ### Utiliziçaõ de i8254 no PC
 
-  - Timer 0: Utilizado para fornecer uma base temporal
+  - Timer 0: Utilizado para fornecer uma base temporal ( Por isso é que é o timer a ser subscrito na implementação do timer)
   - Timer 1: Utilizado para dar refresh a DMA
   - Timer 2: Utilizado para gerar tone
 
