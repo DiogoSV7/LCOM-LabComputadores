@@ -246,7 +246,7 @@ Como é que o processador sabe de um I/O evento?
   - Deste modo, teremos de partilhar interrupt lines entre dispositivos
   - UTILIZAR 2 IH PARA O MESMO DISPOSITIVO NÃO É OQ QUEREMOS FAZER!!! 
 
-## The PC´s Keyboard - LAB4
+## The PC´s Keyboard - LAB3
 
 ### Mini resumo do lab3
 
