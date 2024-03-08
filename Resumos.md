@@ -387,3 +387,105 @@ Similar ao kbd_test_scan() exceto quando o processo deve terminar:
        - *msg.m_notify.interrupts & timer0_int_bit)* 
        - *msg.m_notify.interrupts & kbd_int_bit)*
   2. Estes 2 interrupts devem ser lidados em "driver_receive()" loop
+
+
+## Computer Labs: The PS/2 Mouse (Lab 4)
+
+ * Devemos utilizar o KBC controller (i8042) para interagir com o rato
+ 
+ * Processar inputs do rato
+ 
+ * Utilizando state machines
+
+### PS/2 Operação do rato
+
+ * O rato também tem o seu chip controlador como o teclado.
+ 
+ * O seu chip deteta eventos no rato
+
+     - Pressionar/Largar butões do rato
+     - Deslocar o rato no plano ( 2 9-bit (2´s complement) counters, um por direção)
+     - Estes recebem um reset cada vez que o controlador retorna o seu valor
+
+  * Rato reporta estes eventos ao KBC, enviando 3-byte packet através da serial line
+
+### PS/2 Data Packet do rato
+
+<img width="677" alt="Captura de ecrã 2024-03-08, às 18 55 04" src="https://github.com/DiogoSV7/ResumosLCOM/assets/145665382/62ec523a-84d8-4136-b7f6-fe728d6ddeaf">
+
+
+* Um **scaling parameter** no controlador do rato afeta o valor dos contadores reportados pelo rato:
+    - 1:1, neste caso os valores reportados são os dos counters
+    - 2:1, neste caso os valores reportados são uma função do
+counter conforme determinado por uma tabela
+
+### Modos de Operação do rato
+
+**STREAM MODE** - O rato envia o data packet num maximum fixed rate para o KBC, este rate é programável.
+
+**REMOTE MODE** - O rato apenas envia data packets a pedido do KBC
+
+* Independentemente do modo, cada um dos bytes do mouse data packet são colocados no output buffer do KBC
+
+* O IH do rato deve ler um byte de cada vez, no remote mode é mais fácil não utilizar interrupts
+
+
+### LAB4 : *mouse_test_packet()*
+
+**O QUE A FUNÇÃO FAZ:** 
+
+  * Printa os packets recebidos pelo rato em **STREAM MODE**
+  
+    - Deve terminar depois de receber n nº de packets
+    - Deve dar display do conteúdo dos packets numa maneira humana
+
+**COMO FAZER ESTA FUNÇÃO:**
+
+  * Temos de subscrever as interrupções do rato, ou seja, a cada interrupt devemos ler o *OUT_BUF*
+
+  * Não precisamos de configurar o mouse pq já está inicializado pelo MINIX
+
+  * Porém, precisamos de ativar o stream mode, pq o minix desativa-o em escrita de texto
+  
+  * Temos de desabilitar o IH já instalado no MINIX, através do **IRQ_EXCLUSIVE** policy 
+
+  * IH tem de ler os bytes através do *OUT_BUF* do teclado
+
+      - **packet[]** para guardar os packet bytes
+      - **counter** para saber qual é o byte number
+
+**PROBLEMAS NA SINCRONIZAÇÃO:** 
+
+  * O problema é que os bytes num packet não têm id
+  * A solução é que o bit 3 do primeiro byte de um packet está sempre set
+
+### PS/2 Mouse-Related KBC Commands
+
+ <img width="676" alt="Captura de ecrã 2024-03-08, às 19 10 47" src="https://github.com/DiogoSV7/ResumosLCOM/assets/145665382/72fef180-f042-4c9e-b750-6aa6d34d7c05">
+
+### Status Register bit 5 do AUX
+
+* Bit 5 , AUX, indica se os dados no OUT_BUF vêm do rato ou do teclado
+
+* Não escrever no **IN_BUF** ou no **CTRL_REG** se bit for 1
+
+ ### Comandos do Rato
+
+ <img width="672" alt="Captura de ecrã 2024-03-08, às 19 13 45" src="https://github.com/DiogoSV7/ResumosLCOM/assets/145665382/7b380657-0df1-4f8f-8104-de8b14c13537">
+
+* Cada um destes comandos é enviado para o rato e não é interpretado pelo KBC
+
+* Em resposta a todos os bytes que recebe, o controlador do rato envia um acknowledgment byte:
+
+    - **ACK** (OxFA) - caso esteja tudo OK
+    - **NACK** (OxFE) - se tiver um byte inválido
+    - **ERROR** (OxFC) - caso seja o 2º consecutivo invalid byte
+ 
+* O acknowledgment byte para cada argumento escrito deve, também, ser colocado no **OUT_BUF** do KBC
+
+**!!!! IMPORTANTE - O ACKNOWLEDGMENT BYTE NÃO É UMA RESPOSTA AO COMANDO**
+
+* O **mouse_test_async() também deve subscrever o Timer 0 tal como o kdb_test_timed_scan()
+
+
+  
