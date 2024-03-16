@@ -487,5 +487,61 @@ counter conforme determinado por uma tabela
 
 * O **mouse_test_async() também deve subscrever o Timer 0 tal como o kdb_test_timed_scan()
 
+## Event Driven Designs
 
-  
+ * An event is a change of state
+ * Virtualmente todas as I/O operations são driven por eventos, seja por interrupts ou polling
+
+ * Todos os labs até agora são driven por I/O events, o projeto tbm o vai ser
+
+### Event Driven Design
+
+**CARACTERIZADO POR:** 
+
+ - O flow control é determinado pelo ambiente e não pelo programa
+ - Código que é executado reativamente em resposta a eventos que podem
+ocorrem de forma assíncrona com a execução do programa
+
+### Simple Event Driven Design 
+
+* **Events** - Tipos de eventos que o sistema deve conseguir lidar com
+* **Event Queues** - Estes fornecem o buffering necessário para lidar com eventos que podem ocurrer assynchronously
+* **Event Handler** - Estes processam cada tipo de eventos
+* **Dispatchers** - Monitorizam as event queues e chamam os event handlers corretos
+
+### EDD e State Machines
+
+ State machines são importantes quando o handling de um evento depende do estado de um processo!
+ A própria máquina de estados é event driven.
+
+### LAB4 : test_gesture()
+
+ - O programa deve terminar quando o utilizador desenhar uma linha vertical enquanto pressiona o butão direito
+ - Podemos ignorar alguns eventos, alguns relacionados com outros butões
+
+<img width="680" alt="Captura de ecrã 2024-03-16, às 13 17 03" src="https://github.com/DiogoSV7/LCOM-LabComputadores/assets/145665382/0b938ebe-4294-4b83-bb48-a629381f5630">
+
+<img width="691" alt="Captura de ecrã 2024-03-16, às 13 17 59" src="https://github.com/DiogoSV7/LCOM-LabComputadores/assets/145665382/10268333-e832-4a6e-89c4-129c4343c1c5">
+
+### State Machines
+
+- **MEALY MACHINE** - desenha um DFA, exemplo anterior, ou seja, uma máquina que o output não depende apenas do estado, mas sim, também, do input event
+
+- **MOORE MACHINE** - Uma máquina de estados na qual o seu output apenas depende do seu estado
+
+- Para event-driven designs uma implementação de uma Mealy Machine é muito mais straight forward.
+
+### Event Processing
+
+I/O devices são processados pelo seu interrupt handler correspondente
+
+**OS IH PODEM SER:**
+
+  - **Application Dependent** - Mouse receives mouse packets and also detects the exit sequence
+  - **Application Independent** - The mouse IH receives the mouse packets, and the exit sequence is detected by he application dependent code
+
+No projeto e nos labs, application dependent processing tem de ser feito no mesmo loop de iteração que a application independent processing. No caso em que driver_receive() está a bloquear uma call.
+
+## C Function Pointers
+
+
