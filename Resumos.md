@@ -544,4 +544,25 @@ No projeto e nos labs, application dependent processing tem de ser feito no mesm
 
 ## C Function Pointers
 
+*int (*fp) (int)** - declara fp como um apontador para uma função que recebe um inteiro como argumento e recebe um inteiro
+
+Caso *int foo(int)* seja essa função, então fp=foo inicializa fp a apontar para a função foo().
+
+Também podemos utilizar *n = (*fp)(i);** para invocar a função com o argumento i e guardar o valor na variável n
+
+### Event Dispatching utilizando Function Pointers
+
+* Uma implementação simples de event dispatching seria ou:
+    - Utilizar um switch num event type;
+    - Em cada case chamar o respetivo event handler
+* Outra implementação seria similar a vectored interrupts
+    - Utilizar uma tabela(array) de (apontadores) event handlers(functions)
+    - Indexar a tabela para saltar diretamente para o handler
+
+### Event Dispatching utilizando State Machines
+
+* Podemos usar um estado como argumento para o event handler
+* Ou podemos utilizar como tabela um 2-dimensional array que pode ser indexado pelo evento e estado (event,state)
+
+
 
