@@ -391,6 +391,8 @@ Similar ao kbd_test_scan() exceto quando o processo deve terminar:
 
 ## Computer Labs: The PS/2 Mouse (Lab 4)
 
+ * **RATO FICA NA IRQ_LINE 12**
+
  * Devemos utilizar o KBC controller (i8042) para interagir com o rato
  
  * Processar inputs do rato
