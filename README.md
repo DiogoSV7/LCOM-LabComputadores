@@ -424,6 +424,7 @@ counter conforme determinado por uma tabela
 ### Modos de Operação do rato
 
 **STREAM MODE** - O rato envia o data packet num maximum fixed rate para o KBC, este rate é programável.
+                - No stream mode, temos de desabilitar data reporting antes de enviarmos um comando para evitar interferência com os packets do rato
 
 **REMOTE MODE** - O rato apenas envia data packets a pedido do KBC
 
