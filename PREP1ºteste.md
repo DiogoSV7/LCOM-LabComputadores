@@ -1,0 +1,5 @@
+![20240328_001251](https://github.com/DiogoSV7/LCOM-LabComputadores/assets/145665382/830d6c50-c13b-423d-9140-e647161f8fa6)
+![20240328_001307](https://github.com/DiogoSV7/LCOM-LabComputadores/assets/145665382/4903de34-b3cd-49c3-8a21-1fc5ee9fe5d7)
+![20240328_001314](https://github.com/DiogoSV7/LCOM-LabComputadores/assets/145665382/735487a6-1190-422b-a80c-a8225eae97aa)
+![20240328_001327](https://github.com/DiogoSV7/LCOM-LabComputadores/assets/145665382/26bb0f35-8aa6-4586-b265-8da9d5736920)
+![20240328_001332](https://github.com/DiogoSV7/LCOM-LabComputadores/assets/145665382/43f08d5f-2d79-4676-ab67-1bd6000a51a8)
